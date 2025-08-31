@@ -20,3 +20,15 @@ curl -s http://localhost:5000/api/education
 
 curl -s http://localhost:5000/api/techstack
 curl -s "http://localhost:5000/api/techstack?category=Frontend"
+
+# OK case
+
+curl -X POST http://localhost:5000/api/contact \
+ -H "Content-Type: application/json" \
+ -d '{"name":"John Doe","email":"john@example.com","subject":"Hello","message":"Nice portfolio! Keep it up.","page":"/contact"}'
+
+# Honeypot (bot) case – server responds 204 No Content
+
+curl -X POST http://localhost:5000/api/contact \
+ -H "Content-Type: application/json" \
+ -d '{"name":"Bot","email":"bot@example.com","subject":"spam","message":"buy now","hp":"filled"}'
