@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import nodemailer from "nodemailer";
 
 let transporter = null;
@@ -5,16 +7,6 @@ let mailEnabled = false;
 
 const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_FROM, MAIL_TO } =
   process.env;
-
-if (transporter) {
-  transporter.verify((err, success) => {
-    if (err) {
-      console.error("❌ SMTP connection failed:", err.message);
-    } else {
-      console.log("✅ SMTP server is ready to send emails");
-    }
-  });
-}
 
 if (SMTP_HOST && SMTP_PORT && SMTP_USER && SMTP_PASS && MAIL_FROM && MAIL_TO) {
   transporter = nodemailer.createTransport({
@@ -29,6 +21,25 @@ if (SMTP_HOST && SMTP_PORT && SMTP_USER && SMTP_PASS && MAIL_FROM && MAIL_TO) {
   console.log(
     "✉️  Mailer not configured (skipping contact email notifications)"
   );
+}
+
+console.log("Loaded SMTP env:", {
+  SMTP_HOST: process.env.SMTP_HOST,
+  SMTP_PORT: process.env.SMTP_PORT,
+  SMTP_USER: process.env.SMTP_USER,
+  SMTP_PASS: process.env.SMTP_PASS,
+  MAIL_FROM: process.env.MAIL_FROM,
+  MAIL_TO: process.env.MAIL_TO,
+});
+
+if (transporter) {
+  transporter.verify((err, success) => {
+    if (err) {
+      console.error("❌ SMTP connection failed:", err.message);
+    } else {
+      console.log("✅ SMTP server is ready to send emails");
+    }
+  });
 }
 
 export async function sendContactEmailIfConfigured(payload) {
