@@ -4,6 +4,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
+import apiRouter from "./routes/index.js";
+import { notFound, errorHandler } from "./middleware/error.js";
 
 dotenv.config();
 
@@ -23,6 +25,13 @@ app.use(
   })
 );
 app.use(morgan("dev"));
+
+// Routes
+app.use("/api", apiRouter);
+
+// Error
+app.use(notFound);
+app.use(errorHandler);
 
 // Health route
 app.get("/api/health", (req, res) => {
